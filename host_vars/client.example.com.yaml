@@ -1,0 +1,4 @@
+openvpn_client_server_ip: 8.8.8.8
+openvpn_client_server_port: 2195
+openvpn_client_server_protocol: udp
+openvpn_client_reneg_sec: 259200

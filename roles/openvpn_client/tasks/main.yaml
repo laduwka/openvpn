@@ -1,0 +1,29 @@
+- name: Install openvpn client
+  apt:
+    update-cache: yes
+    name: openvpn=2.3.10-1ubuntu2.1
+    state: present
+  become: yes
+  become_user: root
+  tags: openvpn_client
+
+- name: get content for openvpn.conf
+  set_fact:
+    "{{ item }}_content": "{{ lookup('file' , '{{ item }}') }}"
+  with_items:
+    - "ca_certificate"
+    - "client_certificate"
+    - "client_key"
+    - "tls_auth_key"
+  tags: openvpn_client
+
+- name: Create openvpn config file
+  template:
+    src: "{{ item }}.j2"
+    dest: "/{{ item }}"
+  notify: "restart openvpn@client"
+  with_items:
+    - "etc/openvpn/client.conf"
+  become: yes
+  become_user: root
+  tags: openvpn_client
